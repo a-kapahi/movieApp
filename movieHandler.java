@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-abstract class movie implements Comparable<movie>{
+abstract class movie{
     String name, language, genre, dish;
     Long productionCost;
     LocalDate releaseDate;
@@ -36,16 +36,6 @@ abstract class movie implements Comparable<movie>{
         return dish;
     }
 
-    public int compareTo(movie m){
-        if(m instanceof Bollywood)
-            return 1;
-        else if(m instanceof Hollywood)
-            if(this instanceof Bollywood)
-                return -1;
-            else return 1;
-        else
-            return -1;
-    }
 
     public String toString(){
         return this.name;
@@ -94,10 +84,8 @@ public class movieHandler{
         m.movies.put("Bahubali", new Tollywood("Bahubali"));
         m.movies.put("Coco",new Hollywood("Coco"));
         m.checkBlockbuster("Coco");
-        m.checkBlockbuster("Coco");
-        m.checkBlockbuster("Coco");
         m.getAll();
-        m.gettype(movieType.BOLLYWOOD);
+        m.gettype(movieType.HOLLYWOOD);
 
 
 
