@@ -4,46 +4,48 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-abstract class movie{
+
+abstract class Movie {
     String name, language, genre, dish;
     Long productionCost;
     LocalDate releaseDate;
     boolean isBlockbuster, blockbusterAssigned;
 
-    public movie(String name){
+    public Movie(String name) {
         Scanner in = new Scanner(System.in);
         this.name = name;
         System.out.print("Genre: ");
         //genre = in.nextLine();
         System.out.print("Date(yyyy-mm-dd): ");
         try {
-        //    releaseDate = LocalDate.parse(in.nextLine());
-        }
-        catch (DateTimeParseException e){
+            //    releaseDate = LocalDate.parse(in.nextLine());
+        } catch (DateTimeParseException e) {
             //Handle Exception
         }
 
     }
-    public boolean isBlockbuster(){
-        if(!blockbusterAssigned){
+
+    public boolean isBlockbuster() {
+        if (!blockbusterAssigned) {
             isBlockbuster = new Random().nextBoolean();
             blockbusterAssigned = true;
         }
         return isBlockbuster;
 
     }
-    public String getFood(){
+
+    public String getFood() {
         return dish;
     }
 
 
-    public String toString(){
+    public String toString() {
         return this.name;
     }
 }
 
-class Bollywood extends movie{
-    public Bollywood(String name){
+class Bollywood extends Movie {
+    public Bollywood(String name) {
         super(name);
         language = "Hindi";
         dish = "Dal Makhni";
@@ -52,8 +54,8 @@ class Bollywood extends movie{
 
 }
 
-class Tollywood extends movie{
-    public Tollywood(String name){
+class Tollywood extends Movie {
+    public Tollywood(String name) {
         super(name);
         language = "Tamil";
         dish = "Dosa";
@@ -62,8 +64,8 @@ class Tollywood extends movie{
 
 }
 
-class Hollywood extends movie{
-    public Hollywood(String name){
+class Hollywood extends Movie {
+    public Hollywood(String name) {
         super(name);
         language = "English";
         dish = "Pepper Steak";
@@ -72,40 +74,38 @@ class Hollywood extends movie{
 
 }
 
-public class movieHandler{
-    Map<String, movie> movies = new HashMap<String, movie>();
-    enum movieType{BOLLYWOOD, HOLLYWOOD, TOLLYWOOD;}
-    public static void main(String[] args){
-        movieHandler m = new movieHandler();
+public class MovieHandler {
+    Map<String, Movie> movies = new HashMap<>();
+
+    public static void main(String[] args) {
+        MovieHandler m = new MovieHandler();
         //user input?
-        m.movies.put("DDLJ",new Bollywood("DDLJ"));
-        m.movies.put("Men in Black",new Hollywood("Men in Black"));
-        m.movies.put("Kahani",new Bollywood("Kahani"));
+        m.movies.put("DDLJ", new Bollywood("DDLJ"));
+        m.movies.put("Men in Black", new Hollywood("Men in Black"));
+        m.movies.put("Kahani", new Bollywood("Kahani"));
         m.movies.put("Bahubali", new Tollywood("Bahubali"));
-        m.movies.put("Coco",new Hollywood("Coco"));
+        m.movies.put("Coco", new Hollywood("Coco"));
         m.checkBlockbuster("Coco");
         m.getAll();
-        m.gettype(movieType.HOLLYWOOD);
-
-
-
+        m.getType(movieType.HOLLYWOOD);
     }
 
-    public void getAll(){
-        for (String keys:movies.keySet()) System.out.println(movies.get(keys));
+    public void getAll() {
+        for (String keys : movies.keySet())
+            System.out.println(movies.get(keys));
     }
 
-    public void checkBlockbuster(String name){
-        if(movies.containsKey(name))
-            if(movies.get(name).isBlockbuster())
-                System.out.println(name+" was a blockbuster");
+    public void checkBlockbuster(String name) {
+        if (movies.containsKey(name))
+            if (movies.get(name).isBlockbuster())
+                System.out.println(name + " was a blockbuster");
             else
-                System.out.println(name+" was not a blockbuster");
+                System.out.println(name + " was not a blockbuster");
         else
-            System.out.println(name+" doesn't exist");
+            System.out.println(name + " doesn't exist");
     }
 
-    public void gettype(movieType type){
+    public void getType(movieType type) {
         switch (type) {
             case BOLLYWOOD: {
                 for (String keys : movies.keySet()) {
@@ -114,7 +114,7 @@ public class movieHandler{
                 }
                 break;
             }
-            case HOLLYWOOD:{
+            case HOLLYWOOD: {
                 for (String keys : movies.keySet()) {
                     if (movies.get(keys) instanceof Hollywood)
                         System.out.println(movies.get(keys));
@@ -131,5 +131,6 @@ public class movieHandler{
         }
     }
 
+    enum movieType {BOLLYWOOD, HOLLYWOOD, TOLLYWOOD}
 }
 
