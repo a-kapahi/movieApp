@@ -3,7 +3,6 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 
 abstract class Movie {
     String name, language, genre, dish;
@@ -11,16 +10,13 @@ abstract class Movie {
     LocalDate releaseDate;
     boolean isBlockbuster, blockbusterAssigned;
 
-    public Movie(String name) {
-        Scanner in = new Scanner(System.in);
+    public Movie(String name, String genre, String date) {
         this.name = name;
-        System.out.print("Genre: ");
-        //genre = in.nextLine();
-        System.out.print("Date(yyyy-mm-dd): ");
+        this.genre = genre;
         try {
-            //    releaseDate = LocalDate.parse(in.nextLine());
+            releaseDate = LocalDate.parse(date);
         } catch (DateTimeParseException e) {
-            //Handle Exception
+            System.out.println("Improper date format");
         }
 
     }
@@ -45,8 +41,8 @@ abstract class Movie {
 }
 
 class Bollywood extends Movie {
-    public Bollywood(String name) {
-        super(name);
+    public Bollywood(String name, String genre, String date) {
+        super(name, genre, date);
         language = "Hindi";
         dish = "Dal Makhni";
         productionCost = 100000000L;
@@ -55,8 +51,8 @@ class Bollywood extends Movie {
 }
 
 class Tollywood extends Movie {
-    public Tollywood(String name) {
-        super(name);
+    public Tollywood(String name, String genre, String date) {
+        super(name, genre, date);
         language = "Tamil";
         dish = "Dosa";
         productionCost = 10000000L;
@@ -65,8 +61,8 @@ class Tollywood extends Movie {
 }
 
 class Hollywood extends Movie {
-    public Hollywood(String name) {
-        super(name);
+    public Hollywood(String name, String genre, String date) {
+        super(name, genre, date);
         language = "English";
         dish = "Pepper Steak";
         productionCost = 1000000000L;
@@ -79,15 +75,14 @@ public class MovieHandler {
 
     public static void main(String[] args) {
         MovieHandler m = new MovieHandler();
-        //user input?
-        m.movies.put("DDLJ", new Bollywood("DDLJ"));
-        m.movies.put("Men in Black", new Hollywood("Men in Black"));
-        m.movies.put("Kahani", new Bollywood("Kahani"));
-        m.movies.put("Bahubali", new Tollywood("Bahubali"));
-        m.movies.put("Coco", new Hollywood("Coco"));
+        m.movies.put("DDLJ", new Bollywood("DDLJ", "Romcom", "1992-08-09"));
+        m.movies.put("Men in Black", new Hollywood("Men in Black", "Sci-fi", "2000-03-02"));
+        m.movies.put("Kahani", new Bollywood("Kahani", "Thriller", "2010-03-01"));
+        m.movies.put("Bahubali", new Tollywood("Bahubali", "Action", "2014-10-09"));
+        m.movies.put("Coco", new Hollywood("Coco", "Fantasy", "2018-02-22"));
         m.checkBlockbuster("Coco");
         m.getAll();
-        m.getType(movieType.HOLLYWOOD);
+        m.getType("HOLLYWOOD");
     }
 
     public void getAll() {
@@ -105,32 +100,13 @@ public class MovieHandler {
             System.out.println(name + " doesn't exist");
     }
 
-    public void getType(movieType type) {
-        switch (type) {
-            case BOLLYWOOD: {
-                for (String keys : movies.keySet()) {
-                    if (movies.get(keys) instanceof Bollywood)
-                        System.out.println(movies.get(keys));
-                }
-                break;
-            }
-            case HOLLYWOOD: {
-                for (String keys : movies.keySet()) {
-                    if (movies.get(keys) instanceof Hollywood)
-                        System.out.println(movies.get(keys));
-                }
-                break;
-            }
-            case TOLLYWOOD: {
-                for (String keys : movies.keySet()) {
-                    if (movies.get(keys) instanceof Tollywood)
-                        System.out.println(movies.get(keys));
-                }
-                break;
+    public void getType(String type) {
+        for (String keys : movies.keySet()) {
+            if (movies.get(keys).getClass().getSimpleName().equalsIgnoreCase(type)) {
+                System.out.println(movies.get(keys));
             }
         }
     }
 
-    enum movieType {BOLLYWOOD, HOLLYWOOD, TOLLYWOOD}
 }
 
