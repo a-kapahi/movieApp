@@ -4,27 +4,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-abstract class Movie {
-    String name, language, genre, dish;
-    Long productionCost;
-    LocalDate releaseDate;
-    boolean isBlockbuster, blockbusterAssigned;
+interface FoodStore {
+    public String getFreeDish(Movie m);
+}
 
-    public Movie(String name, String genre, String date) {
+class Movie {
+    String name, genre, dish;
+    LocalDate releaseDate;
+    Boolean isBlockbuster;
+    Type type;
+
+    public Movie(String name, String genre, String date, Type type) {
         this.name = name;
         this.genre = genre;
+        this.type = type;
         try {
             releaseDate = LocalDate.parse(date);
         } catch (DateTimeParseException e) {
             System.out.println("Improper date format");
         }
-
     }
 
     public boolean isBlockbuster() {
-        if (!blockbusterAssigned) {
+        if (isBlockbuster == null) {
             isBlockbuster = new Random().nextBoolean();
-            blockbusterAssigned = true;
         }
         return isBlockbuster;
 
@@ -34,79 +37,63 @@ abstract class Movie {
         return dish;
     }
 
-
     public String toString() {
         return this.name;
     }
-}
 
-class Bollywood extends Movie {
-    public Bollywood(String name, String genre, String date) {
-        super(name, genre, date);
-        language = "Hindi";
-        dish = "Dal Makhni";
-        productionCost = 100000000L;
+    enum Type {
+        BOLLYWOOD("Hindi", 100000), HOLLYWOOD("English", 1000000), TOLLYWOOD("Tamil", 10000);
+        private String language;
+        private long productionCost;
+
+        Type(String language, long productionCost) {
+            this.language = language;
+            this.productionCost = productionCost;
+        }
     }
 
 }
 
-class Tollywood extends Movie {
-    public Tollywood(String name, String genre, String date) {
-        super(name, genre, date);
-        language = "Tamil";
-        dish = "Dosa";
-        productionCost = 10000000L;
-    }
-
-}
-
-class Hollywood extends Movie {
-    public Hollywood(String name, String genre, String date) {
-        super(name, genre, date);
-        language = "English";
-        dish = "Pepper Steak";
-        productionCost = 1000000000L;
-    }
-
-}
-
-public class MovieHandler {
+public class MovieHandler implements FoodStore {
     Map<String, Movie> movies = new HashMap<>();
 
     public static void main(String[] args) {
         MovieHandler m = new MovieHandler();
-        m.movies.put("DDLJ", new Bollywood("DDLJ", "Romcom", "1992-08-09"));
-        m.movies.put("Men in Black", new Hollywood("Men in Black", "Sci-fi", "2000-03-02"));
-        m.movies.put("Kahani", new Bollywood("Kahani", "Thriller", "2010-03-01"));
-        m.movies.put("Bahubali", new Tollywood("Bahubali", "Action", "2014-10-09"));
-        m.movies.put("Coco", new Hollywood("Coco", "Fantasy", "2018-02-22"));
-        m.checkBlockbuster("Coco");
+        m.movies.put("DDLJ", new Movie("DDLJ", "Romcom", "1992-08-09", Movie.Type.BOLLYWOOD));
+        m.movies.put("Men in Black", new Movie("Men in Black", "Sci-fi", "2000-03-02", Movie.Type.HOLLYWOOD));
+        m.movies.put("Kahani", new Movie("Kahani", "Thriller", "2010-03-01", Movie.Type.BOLLYWOOD));
+        m.movies.put("Bahubali", new Movie("Bahubali", "Action", "2014-10-09", Movie.Type.TOLLYWOOD));
+        m.movies.put("Coco", new Movie("Coco", "Fantasy", "2018-02-22", Movie.Type.HOLLYWOOD));
         m.getAll();
         m.getType("HOLLYWOOD");
     }
 
     public void getAll() {
-        for (String keys : movies.keySet())
-            System.out.println(movies.get(keys));
+        for (String key : movies.keySet())
+            System.out.println(movies.get(key));
     }
 
-    public void checkBlockbuster(String name) {
-        if (movies.containsKey(name))
-            if (movies.get(name).isBlockbuster())
-                System.out.println(name + " was a blockbuster");
-            else
-                System.out.println(name + " was not a blockbuster");
-        else
-            System.out.println(name + " doesn't exist");
-    }
 
     public void getType(String type) {
-        for (String keys : movies.keySet()) {
-            if (movies.get(keys).getClass().getSimpleName().equalsIgnoreCase(type)) {
-                System.out.println(movies.get(keys));
+        for (String key : movies.keySet()) {
+            if (movies.get(key).type.toString() == type) {
+                System.out.println(movies.get(key));
             }
         }
     }
 
+    @Override
+    public String getFreeDish(Movie m) {
+        switch (m.type) {
+            case BOLLYWOOD:
+                return "Dal Makhni";
+            case TOLLYWOOD:
+                return "Dosa";
+            case HOLLYWOOD:
+                return "Pepper Steak";
+            default:
+                return null;
+        }
+    }
 }
 
