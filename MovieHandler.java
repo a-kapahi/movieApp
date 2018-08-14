@@ -43,8 +43,8 @@ class Movie {
 
     enum Type {
         BOLLYWOOD("Hindi", 100000), HOLLYWOOD("English", 1000000), TOLLYWOOD("Tamil", 10000);
-        private String language;
-        private long productionCost;
+        String language;
+        long productionCost;
 
         Type(String language, long productionCost) {
             this.language = language;
@@ -69,8 +69,9 @@ public class MovieHandler implements FoodStore {
     }
 
     public void getAll() {
-        for (String key : movies.keySet())
+        for (String key : movies.keySet()) {
             System.out.println(movies.get(key));
+        }
     }
 
 
