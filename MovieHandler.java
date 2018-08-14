@@ -73,8 +73,7 @@ public class MovieHandler implements FoodStore {
             System.out.println(movies.get(key));
         }
     }
-
-
+    
     public void getType(String type) {
         for (String key : movies.keySet()) {
             if (movies.get(key).type.toString() == type) {
