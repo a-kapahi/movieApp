@@ -27,19 +27,19 @@ class Movie {
         }
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getGenre() {
+    String getGenre() {
         return genre;
     }
 
-    public LocalDate getReleaseDate() {
+    LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public Type getType() {
+    Type getType() {
         return type;
     }
 
@@ -53,10 +53,6 @@ class Movie {
         if (isBlockbuster == null) isBlockbuster = new Random().nextBoolean();
         return isBlockbuster;
 
-    }
-
-    public String toString() {
-        return this.name;
     }
 
     enum Type {
@@ -94,7 +90,7 @@ public class MovieTheatre implements FoodStore {
      */
     private void getAll() {
         for (Movie movie : movies) {
-            System.out.println(movie);
+            System.out.println(movie.getName() + ", " + movie.getType().toString() + ", " + movie.getGenre() + ", " + movie.getReleaseDate());
         }
     }
 
@@ -106,7 +102,7 @@ public class MovieTheatre implements FoodStore {
     private void getType(String type) {
         for (Movie movie : movies) {
             if (movie.getType().toString().equalsIgnoreCase(type)) {
-                System.out.println(movie);
+                System.out.println(movie.getName() + ", " + movie.getType().toString() + ", " + movie.getGenre() + ", " + movie.getReleaseDate());
             }
         }
     }
